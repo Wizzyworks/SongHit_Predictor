@@ -8,7 +8,7 @@ Live local demo: `curl` → **99.2% hit probability** on a viral pop single
 ![](screenshots/curl_demo.png)
 
 ### Project Highlights
-- Trained XGBoost classifier on **~20k+ Spotify tracks**
+- Trained XGBoost classifier on **~9k+ Spotify tracks**
 - Achieves **0.75 F1** on imbalanced test set (baseline ~0.58)
 - Only **23 interpretable engineered features** (logs + one-hot top genres + release metadata)
 - Clean pipeline: `train.py` → `xgb_songhit.bin` + `DictVectorizer`
@@ -31,7 +31,7 @@ A&R teams, indie artists, playlist curators, and labels trying to spot the next 
 ---
 
 ### Dataset
-- Source: [Spotify Million Song Dataset + additional features](https://www.kaggle.com/datasets) (public, ~20k rows, <100MB)
+- Source: [Spotify Million Song Dataset + additional features]([https://www.kaggle.com/datasets](https://www.kaggle.com/datasets/alyahmedts13/spotify-songs-for-ml-and-analysis-over-8700-tracks)) (public, ~9k rows, <100MB)
 - Target: `track_popularity > 60` → binary `is_banger`
 - Features used: artist followers/popularity, genres, explicit, album type, release date, duration, etc.
 - Missing values handled gracefully (median + mode imputation)
@@ -64,3 +64,74 @@ A&R teams, indie artists, playlist curators, and labels trying to spot the next 
 ---
 
 ### Project Structure
+.
+├── train.py              # Trains model + saves xgb_songhit.bin
+├── predict.py            # Loads model + Flask API
+├── xgb_songhit.bin       # Trained model + DictVectorizer
+├── spotify_data.csv      # Raw dataset
+├── requirements.txt      # All dependencies
+├── Dockerfile            # Build once, run anywhere
+├── notebooks/
+│   └── SongHit_EDA_finetuning.ipynb
+└── screenshots/          # Proof it works
+
+
+---
+
+### How to Run Locally
+
+```bash
+# 1. Train the model
+pipenv install
+pipenv run python train.py --data spotify_data.csv
+
+# 2. Start the API
+pipenv run python predict.py
+
+# 3. Test it
+curl -X POST http://localhost:9696/predict -H "Content-Type: application/json" -d "{
+"log_artist_followers": 15.0,
+  "log_artist_popularity": 4.38,
+  "log_album_total_tracks": 2.48,
+  "log_track_duration_min": 3.0,
+  "log_release_age": 0.5,
+  "release_month": 6,
+  "release_year": 2024,
+  "track_number": 1,
+  "album_type_single": 1,
+  "explicit_True": 1,
+  "genre_pop": 1,
+  "genre_hip hop": 0,
+  "genre_rap": 0
+}"
+```
+### For Docker Execution
+
+```bash
+# 1. Run docker desktop in background first, then in your command prompt go to the repo destination.
+
+# 2. type these two commands
+docker build -t songhit-api .
+docker run -p 9696:9696 songhit-api
+
+# 3. Test it
+curl -X POST http://localhost:9696/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "log_artist_followers":16.0,"log_artist_popularity":5.0,"log_album_total_tracks":2.48,
+    "log_track_duration_min":3.1,"log_release_age":0.1,"release_month":8,"release_year":2024,
+    "track_number":1,"album_type_album":0,"album_type_compilation":0,"album_type_single":1,
+    "explicit_False":0,"explicit_True":1,"genre_alternative pop":0,"genre_country":0,
+    "genre_folk":0,"genre_hip hop":0,"genre_indie":0,"genre_pop":1,"genre_rap":0,
+    "genre_rock":0,"genre_soundtrack":0,"genre_unknown":0
+  }'
+```
+### Response
+{"hit_prob":0.9922537207603455,"is_banger":true}
+
+### Limitations & Next Steps
+> No audio features (MFCCs, tempo) → future versions can use Librosa + CNN
+> Model may overfit to recent trends (2023–2024 bias)
+> Could add real-time Spotify API lookup for live predictions
+
+
