@@ -5,7 +5,7 @@
 
 Live local demo: `curl` → **99.2% hit probability** on a viral pop single  
 
-![](screenshots/curl_demo.png)
+![](Screenshots/curl_demo.png)
 
 ### Project Highlights
 - Trained XGBoost classifier on **~9k+ Spotify tracks**
@@ -47,9 +47,11 @@ A&R teams, indie artists, playlist curators, and labels trying to spot the next 
 | Artists with **>10M followers** dominate bangers | Network effect |
 | Singles > album tracks for virality       | Release strategy matters |
 
-![](screenshots/eda_explicit.png)
-![](screenshots/eda_genres.png)
-
+![](Screenshots/eda_explicit.png)
+![](Screenshots/eda_genres.png)
+![](Screenshots/eda_song_freshness.png)
+![](Screenshots/eda_artist_popularity.png)
+![](Screenshots/eda_class_balance.png)
 ---
 
 ### Modeling
