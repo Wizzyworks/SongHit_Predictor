@@ -31,7 +31,7 @@ A&R teams, indie artists, playlist curators, and labels trying to spot the next 
 ---
 
 ### Dataset
-- Source: [Spotify Million Song Dataset + additional features]((https://www.kaggle.com/datasets/alyahmedts13/spotify-songs-for-ml-and-analysis-over-8700-tracks)) (public, ~9k rows, <100MB)
+- Source: [Spotify Million Song Dataset + additional features](https://www.kaggle.com/datasets/alyahmedts13/spotify-songs-for-ml-and-analysis-over-8700-tracks) (public, ~9k rows, <100MB)
 - Target: `track_popularity > 60` → binary `is_banger`
 - Features used: artist followers/popularity, genres, explicit, album type, release date, duration, etc.
 - Missing values handled gracefully (median + mode imputation)
