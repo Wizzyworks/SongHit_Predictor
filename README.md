@@ -65,6 +65,7 @@ A&R teams, indie artists, playlist curators, and labels trying to spot the next 
 
 ### Project Structure
 .
+
 ├── train.py              # Trains model + saves xgb_songhit.bin
 
 ├── predict.py            # Loads model + Flask API
@@ -78,6 +79,7 @@ A&R teams, indie artists, playlist curators, and labels trying to spot the next 
 ├── Dockerfile            # Build once, run anywhere
 
 ├── notebooks/
+
 │   └── SongHit_EDA_finetuning.ipynb
 
 └── screenshots/          # Proof it works
